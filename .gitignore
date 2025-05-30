@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+env/
+.venv/
+.env/
+
+# Flask / general config
+instance/
+*.log
+*.db
+*.sqlite3
+
+# Celery beat schedule & worker PID
+celerybeat-schedule
+celerybeat.pid
+
+# Redis dumps
+dump.rdb
+
+# Env files
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Coverage / testing
+.coverage
+htmlcov/
+.tox/
+pytest_cache/
+.nox/
+.mypy_cache/
+.pytest_cache/
+
+# Node (if frontend is involved)
+node_modules/
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
