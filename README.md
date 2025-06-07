@@ -1,17 +1,17 @@
-# 🏗️ Chaos Task Arena - App Architecture Overview
+# 🧪 Chaos Task Arena
 
-This app simulates an unreliable distributed task system using Flask, Celery, Redis, and a real-time dashboard.
-
+A **pet project** built to learn **Celery** and **Redis** by simulating unreliable, retrying background tasks with real-time feedback.  
+Includes a Flask backend, Redis message broker, Celery workers, and a live dashboard.
+<img src="pic.png">
 ---
 
 ## 📦 Tech Stack
 
-* **Flask** – REST API + WebSocket server
-* **Celery** – Distributed task queue
-* **Redis** – Message broker and in-memory task store
-* **PostgreSQL** – Persistent logging (optional)
-* **Flask-SocketIO** – Real-time push updates
-* **Frontend** – Charts and task metrics visualization
+* **Flask** – REST API + WebSocket server  
+* **Celery** – Distributed task queue  
+* **Redis** – Message broker and in-memory task store  
+* **Flask-SocketIO** – Real-time push updates  
+* **Frontend** – Charts and task metrics visualization  
 
 ---
 
@@ -37,34 +37,92 @@ This app simulates an unreliable distributed task system using Flask, Celery, Re
 
 ## ✅ Task Status Lifecycle
 
-Tasks follow this flow:
-
 ```
 QUEUED → STARTED → SUCCESS / FAILURE
                  ↸ (if failed) RETRY → STARTED → ...
 ```
 
-* Failures are retried based on Celery retry settings (like max retries, delay, etc.).
-* All transitions are logged to Redis and optionally PostgreSQL.
+* Failures are retried based on Celery retry settings.
+* Transitions are logged to Redis and optionally a DB.
 
 ---
 
 ## 📊 Real-time Dashboard
 
-Frontend displays live metrics:
+Live metrics include:
+- Total tasks sent
+- In progress
+- Succeeded
+- Failed
+- Retry counts
 
-* Total tasks sent
-* In progress
-* Succeeded
-* Failed
-* Retry counts
-
-Updates are pushed via WebSocket using Flask-SocketIO.
+Push updates happen via WebSocket using Flask-SocketIO.
 
 ---
 
-## ⚙️ Optional Integrations
+## 🚀 How to Run the Project
 
-* 🔔 **Slack / Email notifications** for task summaries or alerts
-* 🐳 **Docker / Kubernetes** support for containerized deployment
-* 🧚 **Testing & Monitoring** via pytest, Prometheus, etc. (optional)
+### 🔁 Option 1: Run with Docker (recommended)
+
+> Make sure you have Docker + Docker Compose installed
+
+```bash
+docker compose up --build
+```
+
+This launches:
+- `web`: Flask app + Celery worker
+- `redis`: Redis broker
+
+App will be available at: [http://localhost:5000](http://localhost:5000)
+
+---
+
+### 💻 Option 2: Run Locally (no Docker)
+
+> Requires Redis running on your machine (default on `localhost:6379`)
+
+#### 1. Install dependencies
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+#### 2. Start Redis manually  
+Make sure you’ve installed Redis locally and run:
+
+```bash
+redis-server
+```
+
+#### 3. Launch the app
+
+```bash
+./launch.sh
+```
+
+The `launch.sh` script:
+- Activates your virtual environment
+- Starts the Celery worker
+- Runs `server.py` (Flask + WebSocket)
+
+---
+
+## 🛠️ Optional Integrations
+
+* 🐳 **Docker/Kubernetes** ready for containerized deployments  
+* 🧪 **Testing & Monitoring** (pytest)
+
+---
+
+## 🎯 Goals
+
+✅ Learn Celery's retry mechanics  
+✅ Visualize live task updates  
+✅ Explore message queue mechanics (Redis as broker)  
+✅ Build a full-stack feedback loop  
+
+---
+
