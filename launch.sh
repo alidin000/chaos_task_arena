@@ -34,14 +34,11 @@ if ! ps -p $CELERY_PID > /dev/null; then
     exit 1
 fi
 
-# Export Flask environment vars
-export FLASK_APP=dashboard.py
-export FLASK_ENV=development
+# Start Flask-SocketIO server using python + eventlet
+echo "🌐 Starting Flask-SocketIO server at http://localhost:5000..."
+python server.py
 
-# Start Flask server
-echo "🌐 Starting Flask server at http://localhost:5000..."
-flask run
 if [ $? -ne 0 ]; then
-    echo "❌ Failed to start Flask server. Exiting."
+    echo "❌ Failed to start Flask-SocketIO server. Exiting."
     exit 1
 fi

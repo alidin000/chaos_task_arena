@@ -16,25 +16,24 @@ logger.setLevel(logging.INFO)
 file_handler = logging.FileHandler('logs/chaos_tasks.log')
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter)
-
 logger.addHandler(file_handler)
 
-
 @app.task(bind=True, max_retries=3)
-def chaos_task(self, job_id, succes_chance):
-    logger.info(f"Starting job {job_id} with success chance {succes_chance}")
+def chaos_task(self, job_id, success_chance):
+    logger.info(f"Starting job {job_id} with success chance {success_chance}")
     try:
-        if random.random() < succes_chance:
+        if random.random() > success_chance:
             if self.request.retries >= self.max_retries:
                 r.incr("failed")
                 logger.error(f"Job {job_id} failed after {self.request.retries} retries")
             else:
                 r.incr("retry")
                 logger.warning(f"Job {job_id} retry {self.request.retries + 1}")
-            raise self.retry(countdown=2 ** self.request.retries)
-        r.incr("success")
-        logger.info(f"Job {job_id} succeeded")
-        return f"{job_id} succeeded"
+                raise self.retry(countdown=2 ** self.request.retries)
+        else:
+            r.incr("success")
+            logger.info(f"Job {job_id} succeeded")
+        return f"{job_id} done"
     except Retry:
         raise
     except Exception as e:
